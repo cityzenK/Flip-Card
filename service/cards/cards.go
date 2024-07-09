@@ -15,7 +15,7 @@ func NewCards(db *sql.DB) *Cards {
 
 func (c *Cards) GetCards() ([]types.Line, error) {
 	cards := []types.Line{}
-	rows, err := c.db.Query("SELECT * FROM cards WHERE type = 2 LIMIT 10")
+	rows, err := c.db.Query("SELECT * FROM cards")
 	if err != nil {
 		return nil, err
 	}

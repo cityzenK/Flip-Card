@@ -9,14 +9,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type Line struct {
-	Id    int
-	Type  int
-	Front string
-	Back  string
-	Known bool
-}
-
 func initCards(db *sql.DB) {
 	err := db.Ping()
 	if err != nil {
