@@ -11,4 +11,7 @@ type Line struct {
 type CardsInterface interface {
 	GetCards() ([]Line, error)
 	GetCardsFilter(string) ([]Line, error)
+	GetCardsById(string) (Line, error)
+	GetCardAlredyKnow(string) (Line, error)
+	MarkUnknown(string) error
 }
