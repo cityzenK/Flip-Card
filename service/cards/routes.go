@@ -37,8 +37,8 @@ func (h *Handler) HandlerFilterCards(c echo.Context) error {
 		"unknown": "where known = 0",
 	}
 
-	statement := filters[c.Param("filter-name")]
-	cards, err := h.store.GetCardsFilter(statement)
+	filter := filters[c.Param("filter-name")]
+	cards, err := h.store.GetCardsFilter(filter)
 	if err != nil {
 		return err
 	}
