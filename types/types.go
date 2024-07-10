@@ -10,4 +10,5 @@ type Line struct {
 
 type CardsInterface interface {
 	GetCards() ([]Line, error)
+	GetCardsFilter(string) ([]Line, error)
 }
