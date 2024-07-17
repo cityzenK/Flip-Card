@@ -18,6 +18,8 @@ func NewHandle(cards types.CardsInterface) *Handler {
 func (h *Handler) RegisterRouter(router *echo.Group) {
 	router.GET("/cards", h.HandleGetCards)
 	router.GET("/filters-cards/:filter-name", h.HandlerFilterCards)
+	router.GET("/memorize_known", h.HandleMemorizeKnown)
+	router.GET("/memorize_known/:card_id", h.HandleMemorizeKnown)
 }
 
 func (h *Handler) HandleGetCards(c echo.Context) error {
@@ -44,4 +46,16 @@ func (h *Handler) HandlerFilterCards(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, cards)
+}
+
+func (h *Handler) HandleMemorizeKnown(c echo.Context) error {
+	cardId := c.Param("card_id")
+	if cardId != "" {
+		card, err := h.store.GetCardsById(cardId)
+		if err != nil {
+			return err
+		}
+		return c.JSON(http.StatusOK, card)
+	}
+	return c.HTML(http.StatusNotFound, "<p>You haven't known any</p>")
 }
