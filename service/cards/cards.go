@@ -60,8 +60,10 @@ func (c *Cards) GetCardsById(cardId string) (types.Line, error) {
 	if err != nil {
 		return types.Line{}, err
 	}
-	if err := row.Scan(&card.Id, &card.Type, &card.Front, &card.Back, &card.Known); err != nil {
-		return types.Line{}, err
+	for row.Next() {
+		if err := row.Scan(&card.Id, &card.Type, &card.Front, &card.Back, &card.Known); err != nil {
+			return types.Line{}, err
+		}
 	}
 
 	return card, nil
@@ -94,4 +96,17 @@ func (c *Cards) MarkUnknown(card_id string) error {
 	}
 	log.Print(rowsUpdate)
 	return nil
+}
+
+func (c *Cards) CheckTableTagExist() (string, error) {
+	var result string
+	res, err := c.db.Query("SELECT name FROM sqlite_master WHERE type = 'table' AND name='tags'")
+	if err != nil {
+		return "", err
+	}
+	if err := res.Scan(result); err != nil {
+		return result, err
+	}
+
+	return result, nil
 }
