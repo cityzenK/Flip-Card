@@ -2,7 +2,9 @@ package api
 
 import (
 	"cards/service/cards"
+	// "cards/templates/tmpl"
 	"database/sql"
+	// "html/template"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -24,6 +26,10 @@ func NewAPIServer(addr string, db *sql.DB) *APIServer {
 func (s *APIServer) Run() error {
 	router := echo.New()
 	defer router.Close()
+	// renderer := &tmpl.TemplateRender{
+	// 	templates: template.Must(template.ParseGlob("*.html")),
+	// }
+	// router.Renderer = renderer
 	router.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
