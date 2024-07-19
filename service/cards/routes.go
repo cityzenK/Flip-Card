@@ -3,6 +3,7 @@ package cards
 import (
 	"cards/types"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -20,6 +21,11 @@ func (h *Handler) RegisterRouter(router *echo.Group) {
 	router.GET("/filters-cards/:filter-name", h.HandlerFilterCards)
 	router.GET("/memorize_known", h.HandleMemorizeKnown)
 	router.GET("/memorize_known/:card_id", h.HandleMemorizeKnown)
+	router.GET("/something", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "layout.html", map[string]interface{}{
+			"name": "Dolly",
+		})
+	}).Name = "foobar"
 }
 
 func (h *Handler) HandleGetCards(c echo.Context) error {
@@ -50,7 +56,7 @@ func (h *Handler) HandlerFilterCards(c echo.Context) error {
 
 func (h *Handler) HandleMemorizeKnown(c echo.Context) error {
 	cardId := c.Param("card_id")
-	if cardId != "" {
+	if cardId == "" {
 		card, err := h.store.GetCardsById(cardId)
 		if err != nil {
 			return err
