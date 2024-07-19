@@ -3,7 +3,6 @@ package cards
 import (
 	"cards/types"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
