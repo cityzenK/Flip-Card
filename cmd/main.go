@@ -18,14 +18,15 @@ func initCards(db *sql.DB) {
 }
 
 func main() {
-	db, err := db.NewSQLite("./db/cards-jwasham-extreme(1).db")
+	conn, err := db.NewSQLite("./db/cards-jwasham-extreme(1).db")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	initCards(db)
+	initCards(conn)
+	defer db.CloseSQLiteDB(conn)
 
-	server := api.NewAPIServer(":8088", db)
+	server := api.NewAPIServer(":8088", conn)
 	if err := server.Run(); err != nil {
 		log.Fatal()
 	}

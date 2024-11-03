@@ -32,7 +32,8 @@ func (h *Handler) HandleGetCards(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, cards)
+	// return c.JSON(http.StatusOK, cards)
+	return c.Render(http.StatusOK, "cards.html", cards)
 }
 
 func (h *Handler) HandlerFilterCards(c echo.Context) error {

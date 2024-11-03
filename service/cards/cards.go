@@ -14,27 +14,32 @@ func NewCards(db *sql.DB) *Cards {
 	return &Cards{db: db}
 }
 
-func (c *Cards) GetCards() ([]types.Line, error) {
-	cards := []types.Line{}
+func (c *Cards) GetCards() (types.Data, error) {
+	cards := types.Lines{}
 	rows, err := c.db.Query("SELECT * FROM cards ORDER BY id DESC")
 	if err != nil {
-		return nil, err
+		return types.Data{}, err
 	}
 	for rows.Next() {
 		var line types.Line
 		if err := rows.Scan(&line.Id, &line.Type, &line.Front, &line.Back, &line.Known); err != nil {
-			return nil, err
+			return types.Data{}, err
 		}
 		cards = append(cards, line)
 	}
+	rows.Close()
+
+	data := types.Data{
+		Lines: cards,
+	}
 
 	rows.Close()
-	return cards, nil
+	return data, nil
 }
 
 func (c *Cards) GetCardsFilter(filter string) ([]types.Line, error) {
 	query := "SELECT * FROM cards " + filter
-	cards := []types.Line{}
+	cards := types.Lines{}
 	rows, err := c.db.Query(query)
 	if err != nil {
 		return nil, err
@@ -47,6 +52,7 @@ func (c *Cards) GetCardsFilter(filter string) ([]types.Line, error) {
 		}
 		cards = append(cards, line)
 	}
+	rows.Close()
 
 	return cards, nil
 }
@@ -65,6 +71,7 @@ func (c *Cards) GetCardsById(cardId string) (types.Line, error) {
 			return types.Line{}, err
 		}
 	}
+	row.Close()
 
 	return card, nil
 }
